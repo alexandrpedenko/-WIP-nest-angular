@@ -26,6 +26,7 @@
       "@utils/*": ["src/shared/utils/*"],
       "@users/*": ["src/users/*"],
       "@auth/*": ["src/auth/*"],
+      "@database/*": ["src/database/*"],
     },
   }
 }

@@ -1,18 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+import { Model } from 'mongoose';
 
 import { UserModel, UserDocument } from '@schemas/user.schema';
+import { EntityRepository } from '@database/entity.repository';
 
 @Injectable()
-export class AuthRepository {
-  constructor(@InjectModel(UserModel.name) private userModel: Model<UserDocument>) {}
-
-  async findOne(userFilterQuery: FilterQuery<UserModel>): Promise<UserDocument> {
-    return await this.userModel.findOne(userFilterQuery).exec();
-  }
-  async create(user: UserModel): Promise<UserDocument> {
-    const newUser = new this.userModel(user);
-    return newUser.save();
+export class AuthRepository extends EntityRepository<UserDocument> {
+  constructor(@InjectModel(UserModel.name) private userModel: Model<UserDocument>) {
+    super(userModel);
   }
 }
