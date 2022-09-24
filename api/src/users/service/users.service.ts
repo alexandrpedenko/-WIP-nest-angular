@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { UserModel } from '@schemas/user.schema';
+import { UserDocument } from '@schemas/user.schema';
 import { UsersRepository } from '@users/repository/users.repository';
 import { UpdateUserDto } from '@users/dto/request';
 
@@ -8,22 +8,22 @@ import { UpdateUserDto } from '@users/dto/request';
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async getUserById(userId: string): Promise<UserModel> {
+  async getUserById(userId: string): Promise<UserDocument> {
     return await this.usersRepository.findOne({ userId });
   }
 
-  async getAllUsers(): Promise<UserModel[]> {
+  async getAllUsers(): Promise<UserDocument[]> {
     return await this.usersRepository.find({});
   }
 
   async updateUser(
     id: string,
     userUpdates: UpdateUserDto,
-  ): Promise<UserModel> {
+  ): Promise<UserDocument> {
     return await this.usersRepository.findOneAndUpdate({ id }, userUpdates);
   }
 
-  async deleteById(userId: string): Promise<UserModel> {
+  async deleteById(userId: string): Promise<UserDocument> {
     return await this.usersRepository.delete({ userId });
   }
 
