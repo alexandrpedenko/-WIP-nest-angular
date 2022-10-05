@@ -8,8 +8,8 @@ import { UpdateUserDto } from '@users/dto/request';
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async getUserById(userId: string): Promise<UserDocument> {
-    return await this.usersRepository.findOne({ userId });
+  async getUserById(_id: string): Promise<UserDocument> {
+    return await this.usersRepository.findOne({ _id });
   }
 
   async getAllUsers(): Promise<UserDocument[]> {
@@ -17,18 +17,18 @@ export class UsersService {
   }
 
   async updateUser(
-    id: string,
+    _id: string,
     userUpdates: UpdateUserDto,
   ): Promise<UserDocument> {
-    return await this.usersRepository.findOneAndUpdate({ id }, userUpdates);
+    return await this.usersRepository.findOneAndUpdate({ _id }, userUpdates);
   }
 
-  async deleteById(userId: string): Promise<UserDocument> {
-    return await this.usersRepository.delete({ userId });
+  async deleteById(_id: string): Promise<UserDocument> {
+    return await this.usersRepository.delete({ _id });
   }
 
-  async isUserExists(id: string): Promise<boolean> {
-    const existedUser = await this.usersRepository.findOne({ id });
+  async isUserExists(_id: string): Promise<boolean> {
+    const existedUser = await this.usersRepository.findOne({ _id });
     if (existedUser) {
       return true;
     }

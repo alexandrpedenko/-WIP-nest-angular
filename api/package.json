@@ -86,7 +86,8 @@
       "@guards(.*)$": "<rootDir>/shared/guards$1",
       "@utils(.*)$": "<rootDir>/shared/utils$1",
       "@users(.*)$": "<rootDir>/users$1",
-      "@auth(.*)$": "<rootDir>/auth$1"
+      "@auth(.*)$": "<rootDir>/auth$1",
+      "@database(.*)$": "<rootDir>/database$1"
     }
   }
 }
