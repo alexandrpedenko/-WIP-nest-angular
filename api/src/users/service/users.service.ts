@@ -12,8 +12,8 @@ export class UsersService {
     return await this.usersRepository.findOne({ userId });
   }
 
-  async getAllUsers(): Promise<UserModel[]> {
-    return await this.usersRepository.find({});
+  async getAllUsers(skip: number, limit: number): Promise<UserModel[]> {
+    return await this.usersRepository.find(skip, limit);
   }
 
   async updateUser(

@@ -22,7 +22,8 @@ export class AuthService {
     if (!existedUser) {
       throw new HttpException(RESPONSE_MESSAGES.invalidUserCredentials, HttpStatus.BAD_REQUEST);
     }
-    if (await this.comparePasswords(password, existedUser.password)) {
+    const isPasswordsValidated = await this.comparePasswords(password, existedUser.password)
+    if (isPasswordsValidated) {
       return { access_token: await this.generateJwt({id: existedUser._id, email: existedUser.email}) };
     }
     throw new HttpException(RESPONSE_MESSAGES.invalidUserCredentials, HttpStatus.BAD_REQUEST);
