@@ -1,0 +1,22 @@
+<nav class="header-nav">
+  <ng-container *ngIf="(this.authService.loggedInUser$ | async) as result; else unAuthorized">
+    <a
+      *ngFor="let item of authorizedMenu"
+      [routerLink]="item.routerLink"
+      class="header-nav__link"
+    >
+      {{ item.text }}
+    </a>
+    <span class="header-nav__link" (click)="authService.logout()">LogOut</span>
+  </ng-container>
+
+  <ng-template #unAuthorized>
+    <a
+      *ngFor="let item of unAuthorizedMenu"
+      [routerLink]="item.routerLink"
+      class="header-nav__link"
+    >
+      {{ item.text }}
+    </a>
+  </ng-template>
+</nav>
