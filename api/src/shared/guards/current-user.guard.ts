@@ -12,7 +12,7 @@ export class CurrentUserGuard extends AuthGuard('jwt') {
     if (err || !user || !requestParam) {
       throw err || new UnauthorizedException();
     }
-    if (user.user.id !== requestParam.userId) {
+    if (user.id !== requestParam.userId) {
      throw new UnauthorizedException();
     }
 

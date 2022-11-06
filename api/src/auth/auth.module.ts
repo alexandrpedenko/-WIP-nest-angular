@@ -9,6 +9,7 @@ import { AuthRepository } from '@auth/repository/auth.repository';
 import { JwtStrategy } from '@auth/strategies/jwt.strategy';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { AuthService } from '@auth/services/auth.service';
+import { RefreshJwtStrategy } from './strategies/refresh.strategy';
 
 @Module({
   imports: [
@@ -16,9 +17,9 @@ import { AuthService } from '@auth/services/auth.service';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('JWT_SECRET'),
+        // secret: configService.get('JWT_SECRET'),
         // TODO: change time after implementing refresh token functionality
-        signOptions: { expiresIn: '10000s' }, 
+        // signOptions: { expiresIn: '10000s' },
       }),
     }),
     MongooseModule.forFeature([
@@ -28,7 +29,7 @@ import { AuthService } from '@auth/services/auth.service';
       },
     ]),
   ],
-  providers: [AuthService, AuthRepository, JwtAuthGuard, JwtStrategy],
+  providers: [AuthService, AuthRepository, JwtAuthGuard, JwtStrategy, RefreshJwtStrategy],
   controllers: [AuthController],
   exports: [AuthService, AuthRepository],
 })

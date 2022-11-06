@@ -1,6 +1,14 @@
-import { IsString } from 'class-validator';
+import { Expose, Type } from 'class-transformer';
+import { IsString, ValidateNested } from 'class-validator';
+import { UserResponseDto } from '@users/dto/response';
 
-export class LoginResponseDto {
+export class AuthResponseDto {
   @IsString()
-  access_token: string;
+  @Expose()
+  accessToken: string;
+
+  @Type(() => UserResponseDto)
+  @ValidateNested()
+  @Expose()
+  user: UserResponseDto;
 }

@@ -20,6 +20,9 @@ export class UserModel {
 
   @Prop({ required: true })
   userName: string;
+
+  @Prop()
+  refreshToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserModel);
