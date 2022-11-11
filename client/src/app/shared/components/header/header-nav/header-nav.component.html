@@ -1,5 +1,5 @@
 <nav class="header-nav">
-  <ng-container *ngIf="(this.authService.loggedInUser$ | async) as result; else unAuthorized">
+  <ng-container *ngIf="this.authService.loggedInUser$ | async; else unAuthorized">
     <a
       *ngFor="let item of authorizedMenu"
       [routerLink]="item.routerLink"
