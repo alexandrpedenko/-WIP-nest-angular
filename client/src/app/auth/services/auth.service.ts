@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, interval, Observable } from 'rxjs';
+import { mergeMap, takeUntil, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 import { AuthApiService } from '@auth/services/auth-api.service';
 import { LocalStorageService } from '@shared/services/local-storage.service';
 import { AuthInput, AuthResponse } from '@auth/types';
-import { Router } from '@angular/router';
+import { UnsubscribeSubject } from '@shared/utils/rxjs-unsubscribe';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private unsubscribeSubject = new UnsubscribeSubject();
   public loggedInUser = new BehaviorSubject<AuthResponse | null>(null);
   public loggedInUser$: Observable<AuthResponse | null>
 
@@ -40,13 +42,37 @@ export class AuthService {
   }
 
   public logout(): void {
+    this.authApi.logout();
     this.localStorage.delete('jwt_token');
+    this.localStorage.delete('jwt_token_refresh');
     this.loggedInUser.next(null);
     this.router.navigateByUrl('/auth/login');
   }
 
+  public setRefreshingToken(): void {
+    interval(1000 * 10 * 1).pipe(
+      tap(() => {
+        console.log('Test refresh')
+      }),
+      mergeMap(() => {
+        const refreshToken = this.localStorage.get<string>('jwt_token_refresh');
+        return this.authApi.refreshToken(refreshToken);
+      }),
+      takeUntil(this.unsubscribeSubject),
+    ).subscribe(response => {
+      this.localStorage.set<string>('jwt_token', response.accessToken);
+      this.localStorage.set<string>('jwt_token_refresh', response.refreshToken);
+    });
+  }
+
+  destroySubscribes() {
+    this.unsubscribeSubject.destroy();
+  }
+
   private handleAuth(result: AuthResponse): void {
-    this.localStorage.set<AuthResponse>('jwt_token', result);
+    const { accessToken, user } = result;
+    this.localStorage.set<string>('jwt_token', accessToken);
+    this.localStorage.set<string>('jwt_token_refresh', user.refreshToken);
     this.loggedInUser.next(result);
     this.router.navigateByUrl('/overview');
   }

@@ -1,14 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { OverviewComponent } from '@user/components/overview/overview.component';
 
-const routes: Routes = [
-  {
-    path: '',
-    pathMatch: 'full',
-    component: OverviewComponent
-  }
-];
+const routes: Routes = [];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
