@@ -3,11 +3,19 @@
     <a
       *ngFor="let item of authorizedMenu"
       [routerLink]="item.routerLink"
+      [matTooltip]="item.text"
+      routerLinkActive="header-nav__link-active"
       class="header-nav__link"
     >
-      {{ item.text }}
+      <mat-icon>{{item.icon}}</mat-icon>
     </a>
-    <span class="header-nav__link" (click)="authService.logout()">LogOut</span>
+    <span
+      class="header-nav__link"
+      matTooltip="LogOut"
+      (click)="authService.logout()"
+    >
+      <mat-icon>logout</mat-icon>
+    </span>
   </ng-container>
 
   <ng-template #unAuthorized>

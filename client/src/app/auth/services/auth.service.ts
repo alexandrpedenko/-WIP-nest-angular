@@ -7,6 +7,7 @@ import { AuthApiService } from '@auth/services/auth-api.service';
 import { LocalStorageService } from '@shared/services/local-storage.service';
 import { AuthInput, AuthResponse } from '@auth/types';
 import { UnsubscribeSubject } from '@shared/utils/rxjs-unsubscribe';
+import { takeWhile } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -50,23 +51,16 @@ export class AuthService {
   }
 
   public setRefreshingToken(): void {
-    interval(1000 * 10 * 1).pipe(
-      tap(() => {
-        console.log('Test refresh')
-      }),
+    interval(1000 * 60 * 3).pipe(
+      takeWhile(() => this.loggedInUser.value !== null),
       mergeMap(() => {
         const refreshToken = this.localStorage.get<string>('jwt_token_refresh');
         return this.authApi.refreshToken(refreshToken);
       }),
-      takeUntil(this.unsubscribeSubject),
     ).subscribe(response => {
       this.localStorage.set<string>('jwt_token', response.accessToken);
       this.localStorage.set<string>('jwt_token_refresh', response.refreshToken);
     });
-  }
-
-  destroySubscribes() {
-    this.unsubscribeSubject.destroy();
   }
 
   private handleAuth(result: AuthResponse): void {
@@ -74,11 +68,17 @@ export class AuthService {
     this.localStorage.set<string>('jwt_token', accessToken);
     this.localStorage.set<string>('jwt_token_refresh', user.refreshToken);
     this.loggedInUser.next(result);
-    this.router.navigateByUrl('/overview');
+    this.setRefreshingToken();
+    this.router.navigateByUrl('/home');
   }
 
   private checkIsUserLoggedIn(): void {
     const userFromStorage = this.localStorage.get<AuthResponse>('jwt_token');
-    userFromStorage ? this.loggedInUser.next(userFromStorage) : this.loggedInUser.next(null);
+    if (userFromStorage) {
+      this.loggedInUser.next(userFromStorage);
+      this.setRefreshingToken();
+    } else {
+      this.loggedInUser.next(null);
+    }
   }
 }

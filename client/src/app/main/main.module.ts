@@ -1,17 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OverviewComponent } from './overview.component';
-import { OverviewRoutingModule } from './overview-routing.module';
+
+import { MainRoutingModule } from './main-routing.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtRequestInterceptor } from '@shared/interceptors/jwt.interceptor';
 
 @NgModule({
-  declarations: [
-    OverviewComponent
-  ],
   imports: [
     CommonModule,
-    OverviewRoutingModule
+    MainRoutingModule
   ],
   providers: [
     {
@@ -21,4 +18,4 @@ import { JwtRequestInterceptor } from '@shared/interceptors/jwt.interceptor';
     },
   ]
 })
-export class OverviewModule { }
+export class MainModule {}

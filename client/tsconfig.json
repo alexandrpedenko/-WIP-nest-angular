@@ -26,6 +26,8 @@
       "@shared/*": ["src/app/shared/*"],
       "@user/*": ["src/app/user/*"],
       "@auth/*": ["src/app/auth/*"],
+      "@search/*": ["src/app/search/*"],
+      "@home/*": ["src/app/home/*"],
     }
   },
   "angularCompilerOptions": {
