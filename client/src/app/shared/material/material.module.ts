@@ -9,6 +9,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatSelectModule } from '@angular/material/select';
 
 const modules = [
   CommonModule,
@@ -21,6 +23,8 @@ const modules = [
   MatTooltipModule,
   MatListModule,
   MatCardModule,
+  MatDividerModule,
+  MatSelectModule,
 ]
 
 @NgModule({

@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { UserModule } from '@user/user.module';
 import { MaterialModule } from '@shared/material/material.module';
 import { SearchComponent } from './search.component';
+import { SharedComponentsModule } from '@shared/components/shared-components.module';
 
 @NgModule({
   declarations: [
@@ -12,10 +13,11 @@ import { SearchComponent } from './search.component';
   ],
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     MaterialModule,
     UserModule,
-  ]
+    SharedComponentsModule
+  ],
+  exports: [ SearchComponent ]
 })
 export class SearchModule { }
