@@ -77,6 +77,17 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "@interceptors(.*)$": "<rootDir>/shared/interceptors$1",
+      "@decorators(.*)$": "<rootDir>/shared/decorators$1",
+      "@constants(.*)$": "<rootDir>/shared/constants$1",
+      "@schemas(.*)$": "<rootDir>/shared/schemas$1",
+      "@guards(.*)$": "<rootDir>/shared/guards$1",
+      "@utils(.*)$": "<rootDir>/shared/utils$1",
+      "@users(.*)$": "<rootDir>/users$1",
+      "@auth(.*)$": "<rootDir>/auth$1",
+      "@database(.*)$": "<rootDir>/database$1"
+    }
   }
 }

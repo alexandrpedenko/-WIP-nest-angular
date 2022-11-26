@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
-import { UserModel } from '@schemas/user.schema';
+import { UserDocument, UserModel } from '@schemas/user.schema';
 import { RESPONSE_MESSAGES } from '@constants/user';
 import { UsersService } from '@users/service/users.service';
 import { Serialize } from '@decorators/serialize.decorator';
@@ -26,18 +26,18 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Get()
-  async getAllUsers(): Promise<UserModel[]> {
+  async getAllUsers(): Promise<UserDocument[]> {
     return this.usersService.getAllUsers();
   }
 
   @Get(':userId')
-  async getUser(@Param('userId') userId: string): Promise<UserModel> {
+  async getUser(@Param('userId') userId: string): Promise<UserDocument> {
     return this.usersService.getUserById(userId);
   }
 
   @Delete(':userId')
   @UseGuards(CurrentUserGuard)
-  async deleteUser(@Param('userId') userId: string): Promise<UserModel> {
+  async deleteUser(@Param('userId') userId: string): Promise<UserDocument> {
     return this.usersService.deleteById(userId);
   }
 
@@ -47,7 +47,7 @@ export class UsersController {
   async updateUser(
     @Param('userId') userId: string,
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<UserModel> {
+  ): Promise<UserDocument> {
     if (await this.usersService.isUserExists(userId)) {
       return this.usersService.updateUser(userId, updateUserDto);
     }
