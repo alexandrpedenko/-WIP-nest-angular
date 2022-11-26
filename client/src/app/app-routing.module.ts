@@ -14,7 +14,7 @@ const routes: Routes = [
   },
   {
     path: 'overview',
-    loadChildren: () => import('./user/user.module').then(m => m.UserModule),
+    loadChildren: () => import('./overview/overview.module').then(m => m.OverviewModule),
     canActivate: [ LoginActivate ]
   },
   {
