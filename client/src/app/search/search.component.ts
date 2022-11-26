@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil, distinctUntilChanged, tap } from 'rxjs/operators';
 import { advancedSearchValidator } from '@shared/utils';
 import { UnsubscribeSubject } from '@shared/utils/rxjs-unsubscribe';
+import { SearchService } from './search.service';
+import { SearchFormFieldValue } from '../shared/components/search-control/custom-search-control/types';
 
 @Component({
   selector: 'app-search',
@@ -12,20 +14,24 @@ import { UnsubscribeSubject } from '@shared/utils/rxjs-unsubscribe';
 export class SearchComponent implements OnInit, OnDestroy {
   private unsubscribeSubject = new UnsubscribeSubject();
   formControl = new FormControl(
-    { scope: 'users', query: '' },
+    { scope: 'userName', query: '' },
     advancedSearchValidator
   );
 
-  constructor() {}
+  constructor(public searchService: SearchService) {}
 
   ngOnInit(): void {
+    this.searchService.initSearch();
+
     this.formControl.valueChanges.pipe(
       debounceTime(800),
+      distinctUntilChanged(),
       takeUntil(this.unsubscribeSubject),
-    ).subscribe();
+    ).subscribe((searchQuery: SearchFormFieldValue) => this.searchService.updateSearchQuery(searchQuery));
   }
 
   ngOnDestroy(): void {
+    this.searchService.destroy();
     this.unsubscribeSubject.destroy();
   }
 }

@@ -1,10 +1,11 @@
 
 <mat-card class="example-card">
   <mat-card-header>
-    <div mat-card-avatar>
-      <mat-icon>account_circle</mat-icon>
+    <div mat-card-avatar class="user-avatar">
+      <!-- <mat-icon>account_circle</mat-icon> -->
+      <span>{{user.userName[0]}}</span>
     </div>
-    <mat-card-title>{{ user?.userName }}</mat-card-title>
+    <mat-card-title>{{ user.userName }}</mat-card-title>
     <mat-card-subtitle>Some user status</mat-card-subtitle>
   </mat-card-header>
 </mat-card>

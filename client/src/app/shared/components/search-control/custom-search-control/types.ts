@@ -1,4 +1,4 @@
-export interface FormFieldValue {
+export interface SearchFormFieldValue {
   query: string;
   scope: string;
 }

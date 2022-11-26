@@ -6,5 +6,11 @@
       placeholder="Looking for..."
     ></app-custom-search-control>
   </mat-form-field>
+
+  <div class="search__main">
+    <div class="search__results">
+      <app-user-list [users$]="searchService.users$"></app-user-list>
+    </div>
+  </div>
 </div>
 

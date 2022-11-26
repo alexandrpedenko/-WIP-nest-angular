@@ -13,7 +13,7 @@ export abstract class EntityRepository<T extends Document> {
 
   async find({searchField, searchValue, skip = 0, limit}: GetEntityDto): Promise<T[] | null> {
     const filterQuery = {};
-    if (searchField) {
+    if (searchField && searchValue) {
       filterQuery[searchField] = { $regex: searchValue, $options: "i" };
     }
     const query = this.entityModel.find(filterQuery)

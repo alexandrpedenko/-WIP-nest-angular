@@ -16,6 +16,10 @@ import { MaterialModule } from '@shared/material/material.module';
     CommonModule,
     UserRoutingModule,
     MaterialModule
+  ],
+  exports: [
+    UserListComponent,
+    UserListItemComponent
   ]
 })
 export class UserModule { }

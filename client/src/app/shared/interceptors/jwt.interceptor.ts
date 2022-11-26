@@ -8,9 +8,9 @@ export class JwtRequestInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let token = this.authService.loggedInUser.value?.accessToken;
-
-    if (token) {
+    const token = this.authService.loggedInUser.value;
+    const isRefreshRequest = request.url.includes('refresh');
+    if (token && !isRefreshRequest) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`,

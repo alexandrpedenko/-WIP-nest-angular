@@ -5,7 +5,7 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 import { MatInput } from '@angular/material/input';
 import { Subject,  } from 'rxjs';
 import { take, takeUntil, tap } from 'rxjs/operators';
-import { FormFieldValue } from './types';
+import { SearchFormFieldValue } from './types';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { UnsubscribeSubject } from '@shared/utils/rxjs-unsubscribe';
 
@@ -31,7 +31,7 @@ export class CustomErrorMatcher implements ErrorStateMatcher {
   ]
 })
 export class CustomSearchControlComponent
-  implements OnInit, OnDestroy, MatFormFieldControl<FormFieldValue>, ControlValueAccessor
+  implements OnInit, OnDestroy, MatFormFieldControl<SearchFormFieldValue>, ControlValueAccessor
 {
   static nextId = 0;
   stateChanges = new Subject<void>();
@@ -51,11 +51,11 @@ export class CustomSearchControlComponent
   describedBy = '';
 
   @Input()
-  set value(value: FormFieldValue) {
+  set value(value: SearchFormFieldValue) {
     this.form.patchValue(value);
     this.stateChanges.next();
   }
-  get value(): FormFieldValue {
+  get value(): SearchFormFieldValue {
     return this.form.value;
   }
 
@@ -134,7 +134,7 @@ export class CustomSearchControlComponent
     this.focusMonitor.focusVia(this.input, 'program');
   }
 
-  writeValue(obj: FormFieldValue): void {
+  writeValue(obj: SearchFormFieldValue): void {
     this.value = obj;
   }
   registerOnChange(fn: any): void {
@@ -148,6 +148,6 @@ export class CustomSearchControlComponent
     this.form.disable();
     this.stateChanges.next();
   }
-  onChange: (value: FormFieldValue) => void;
+  onChange: (value: SearchFormFieldValue) => void;
   onTouch: () => void;
 }

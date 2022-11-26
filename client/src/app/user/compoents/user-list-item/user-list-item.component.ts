@@ -7,5 +7,5 @@ import { IUser } from '@user/types/user.interface';
   styleUrls: ['./user-list-item.component.scss']
 })
 export class UserListItemComponent {
-  @Input() user?: IUser
+  @Input() user: IUser
 }
