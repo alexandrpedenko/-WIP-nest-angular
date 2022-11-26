@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { UserModel } from '@schemas/user.schema';
 import { UsersRepository } from '@users/repository/users.repository';
 import { UpdateUserDto } from '@users/dto/request';
+import { GetEntityDto } from '@dtos/request';
 
 @Injectable()
 export class UsersService {
@@ -12,8 +13,8 @@ export class UsersService {
     return await this.usersRepository.findOne({ userId });
   }
 
-  async getAllUsers(skip: number, limit: number): Promise<UserModel[]> {
-    return await this.usersRepository.find(skip, limit);
+  async getAllUsers(query: GetEntityDto): Promise<UserModel[]> {
+    return await this.usersRepository.find(query);
   }
 
   async updateUser(

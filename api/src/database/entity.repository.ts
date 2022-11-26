@@ -1,4 +1,5 @@
 import { FilterQuery, Model, Document } from "mongoose";
+import { GetEntityDto } from "@dtos/request";
 
 export abstract class EntityRepository<T extends Document> {
   constructor(protected readonly entityModel: Model<T>) {}
@@ -10,8 +11,12 @@ export abstract class EntityRepository<T extends Document> {
     return this.entityModel.findOne(entityQuery, projection).exec();
   }
 
-  async find(skip = 0, limit: number): Promise<T[] | null> {
-    const query = this.entityModel.find()
+  async find({searchField, searchValue, skip = 0, limit}: GetEntityDto): Promise<T[] | null> {
+    const filterQuery = {};
+    if (searchField) {
+      filterQuery[searchField] = { $regex: searchValue, $options: "i" };
+    }
+    const query = this.entityModel.find(filterQuery)
       .sort({ _id: 1 }) // TODO: refactor in future accordingly sorting functionality
       .skip(skip);
     if (limit) {

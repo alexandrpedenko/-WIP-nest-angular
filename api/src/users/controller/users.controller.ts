@@ -19,7 +19,7 @@ import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { UserResponseDto } from '@users/dto/response';
 import { UpdateUserDto } from '@users/dto/request';
 import { CurrentUserGuard } from '@guards/current-user.guard';
-import { PaginationParams } from '@dtos/pagination.dto';
+import { GetEntityDto } from '@dtos/request'
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
@@ -28,8 +28,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Get()
-  async getAllUsers(@Query() { skip, limit }: PaginationParams): Promise<UserModel[]> {
-    return this.usersService.getAllUsers(skip, limit);
+  async getAllUsers(@Query() query: GetEntityDto): Promise<UserModel[]> {
+    return this.usersService.getAllUsers(query);
   }
 
   @Get(':userId')
