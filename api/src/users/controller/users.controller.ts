@@ -8,6 +8,7 @@ import {
   HttpException,
   HttpStatus,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 
 import { UserDocument, UserModel } from '@schemas/user.schema';
@@ -18,6 +19,7 @@ import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { UserResponseDto } from '@users/dto/response';
 import { UpdateUserDto } from '@users/dto/request';
 import { CurrentUserGuard } from '@guards/current-user.guard';
+import { GetEntityDto } from '@dtos/request'
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
@@ -26,8 +28,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Get()
-  async getAllUsers(): Promise<UserDocument[]> {
-    return this.usersService.getAllUsers();
+  async getAllUsers(@Query() query: GetEntityDto): Promise<UserDocument[]> {
+    return this.usersService.getAllUsers(query);
   }
 
   @Get(':userId')
@@ -48,7 +50,8 @@ export class UsersController {
     @Param('userId') userId: string,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<UserDocument> {
-    if (await this.usersService.isUserExists(userId)) {
+    const isUserExist = await this.usersService.isUserExists(userId);
+    if (isUserExist) {
       return this.usersService.updateUser(userId, updateUserDto);
     }
     throw new HttpException(RESPONSE_MESSAGES.userNotFound, HttpStatus.NOT_FOUND);

@@ -24,6 +24,7 @@
       "@schemas/*": ["src/shared/schemas/*"],
       "@guards/*": ["src/shared/guards/*"],
       "@utils/*": ["src/shared/utils/*"],
+      "@dtos/*": ["src/shared/dtos/*"],
       "@users/*": ["src/users/*"],
       "@auth/*": ["src/auth/*"],
       "@database/*": ["src/database/*"],

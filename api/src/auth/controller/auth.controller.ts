@@ -17,7 +17,8 @@ export class AuthController {
 
   @Post('/register')
   async registerUser(@Body() createUserDto: CreateUserDto): Promise<UserModel> {
-    if (await this.authService.isUserExists(createUserDto.email)) {
+    const isUserExists = await this.authService.isUserExists(createUserDto.email)
+    if (isUserExists) {
       throw new HttpException(RESPONSE_MESSAGES.userRegistered, HttpStatus.BAD_REQUEST);
     }
     return await this.authService.createUser(createUserDto);
