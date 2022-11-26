@@ -1,0 +1,13 @@
+<div class="toast" [class]="toastType">
+  <div class="toast__description">
+    <h3>{{title}}</h3>
+    <p class="toast__message">{{message}}</p>
+  </div>
+  <button
+    mat-flat-button
+    color="secondary"
+    class="toast__button"
+    (click)="close()"
+  >Ok</button>
+</div>
+

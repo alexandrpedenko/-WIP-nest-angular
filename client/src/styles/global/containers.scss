@@ -1,0 +1,15 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 500px;
+  margin: 20px auto;
+
+  .mat-form-field-infix {
+    width: 300px;
+  }
+  .form-submit {
+    margin-top: 30px;
+  }
+}
