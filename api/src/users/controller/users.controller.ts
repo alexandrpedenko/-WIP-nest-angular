@@ -11,7 +11,7 @@ import {
   Query,
 } from '@nestjs/common';
 
-import { UserModel } from '@schemas/user.schema';
+import { UserDocument, UserModel } from '@schemas/user.schema';
 import { RESPONSE_MESSAGES } from '@constants/user';
 import { UsersService } from '@users/service/users.service';
 import { Serialize } from '@decorators/serialize.decorator';
@@ -28,18 +28,18 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Get()
-  async getAllUsers(@Query() query: GetEntityDto): Promise<UserModel[]> {
+  async getAllUsers(@Query() query: GetEntityDto): Promise<UserDocument[]> {
     return this.usersService.getAllUsers(query);
   }
 
   @Get(':userId')
-  async getUser(@Param('userId') userId: string): Promise<UserModel> {
+  async getUser(@Param('userId') userId: string): Promise<UserDocument> {
     return this.usersService.getUserById(userId);
   }
 
   @Delete(':userId')
   @UseGuards(CurrentUserGuard)
-  async deleteUser(@Param('userId') userId: string): Promise<UserModel> {
+  async deleteUser(@Param('userId') userId: string): Promise<UserDocument> {
     return this.usersService.deleteById(userId);
   }
 
@@ -49,7 +49,7 @@ export class UsersController {
   async updateUser(
     @Param('userId') userId: string,
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<UserModel> {
+  ): Promise<UserDocument> {
     const isUserExist = await this.usersService.isUserExists(userId);
     if (isUserExist) {
       return this.usersService.updateUser(userId, updateUserDto);
