@@ -7,6 +7,7 @@ import { GlobalHttpErrorInterceptor } from '@shared/interceptors/http-global.int
 import { SharedComponentsModule } from '@shared/components/shared-components.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { JwtRequestInterceptor } from '@shared/interceptors/jwt.interceptor';
 
 @NgModule({
   imports: [
@@ -14,7 +15,7 @@ import { AppComponent } from './app.component';
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    SharedComponentsModule
+    SharedComponentsModule,
   ],
   declarations: [
     AppComponent
@@ -24,7 +25,12 @@ import { AppComponent } from './app.component';
       provide: HTTP_INTERCEPTORS,
       useClass: GlobalHttpErrorInterceptor,
       multi: true,
-    }
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtRequestInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent]
 })

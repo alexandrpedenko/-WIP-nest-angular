@@ -1,0 +1,5 @@
+<div class="users-list">
+  <div class="users-list__item" *ngFor="let user of users$ | async">
+    <app-user-list-item [user]="user"></app-user-list-item>
+  </div>
+</div>

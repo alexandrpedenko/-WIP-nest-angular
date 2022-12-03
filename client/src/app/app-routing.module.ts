@@ -4,23 +4,18 @@ import { LoginActivate } from '@shared/guards/login-activate.guard';
 
 const routes: Routes = [
   {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'overview'
-  },
-  {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
   },
   {
-    path: 'overview',
-    loadChildren: () => import('./user/user.module').then(m => m.UserModule),
-    canActivate: [ LoginActivate ]
+    path: '',
+    loadChildren: () => import('./main/main.module').then(m => m.MainModule),
+    canActivate: [ LoginActivate ],
   },
   {
     path: '**',
-    redirectTo: 'overview'
-  }
+    redirectTo: ''
+  },
 ];
 
 @NgModule({

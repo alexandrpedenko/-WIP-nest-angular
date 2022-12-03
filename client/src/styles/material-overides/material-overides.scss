@@ -6,3 +6,20 @@ mat-form-field {
 .cdk-overlay-container .mat-snack-bar-container {
   padding: 0;
 }
+
+// Custom Search
+.search {
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    display: flex;
+    align-items: center;
+    padding: .4em;
+    border-radius: 20px;
+  }
+  .mat-form-field-underline {
+    display: none;
+  }
+
+  .mat-select-arrow-wrapper {
+    height: auto;
+  }
+}

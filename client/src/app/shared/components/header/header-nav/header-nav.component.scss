@@ -1,9 +1,25 @@
 .header-nav {
+  display: flex;
+  align-items: center;
+
   &__link {
-    margin-left: 10px;
-    color: white;
+    display: inline-flex;
+    align-items: center;
+    margin-left: 14px;
+    padding: 6px 14px;
+    color: #555;
     font-size: 15px;
     text-decoration: none;
+    border-radius: 22px;
+    transition: all .2s linear;
     cursor: pointer;
+    &:hover {
+      color: #333;
+      background-color: rgba(60, 60, 60, 0.15);
+    }
+    &-active {
+      background-color: rgba(60, 60, 60, 0.3);
+      color: #333;
+    }
   }
 }

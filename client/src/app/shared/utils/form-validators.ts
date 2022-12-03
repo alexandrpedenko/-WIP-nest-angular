@@ -20,3 +20,13 @@ export function passwordsMatch (control: AbstractControl): ValidationErrors | nu
     return { passwordsNotMatching: true };
   }
 }
+
+export function advancedSearchValidator(control: AbstractControl): ValidationErrors | null {
+  return control.value.scope !== null && control.value.query !== ''
+    ? null
+    : {
+        validateSearch: {
+          valid: true,
+        },
+      };
+}

@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, interval, Observable } from 'rxjs';
+import { mergeMap, takeWhile, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 import { AuthApiService } from '@auth/services/auth-api.service';
 import { LocalStorageService } from '@shared/services/local-storage.service';
 import { AuthInput, AuthResponse } from '@auth/types';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  public loggedInUser = new BehaviorSubject<AuthResponse | null>(null);
-  public loggedInUser$: Observable<AuthResponse | null>
+  public loggedInUser = new BehaviorSubject<string | null>(null);
+  public loggedInUser$: Observable<string | null>
 
   constructor(
     private router: Router,
@@ -40,19 +40,43 @@ export class AuthService {
   }
 
   public logout(): void {
+    this.authApi.logout();
     this.localStorage.delete('jwt_token');
+    this.localStorage.delete('jwt_token_refresh');
     this.loggedInUser.next(null);
     this.router.navigateByUrl('/auth/login');
   }
 
+  public setRefreshingToken(): void {
+    interval(1000 * 60 * 3).pipe(
+      takeWhile(() => this.loggedInUser.value !== null),
+      mergeMap(() => {
+        const refreshToken = this.localStorage.get<string>('jwt_token_refresh');
+        return this.authApi.refreshToken(refreshToken);
+      }),
+    ).subscribe(response => {
+      this.loggedInUser.next(response.accessToken);
+      this.localStorage.set<string>('jwt_token', response.accessToken);
+      this.localStorage.set<string>('jwt_token_refresh', response.refreshToken);
+    });
+  }
+
   private handleAuth(result: AuthResponse): void {
-    this.localStorage.set<AuthResponse>('jwt_token', result);
-    this.loggedInUser.next(result);
-    this.router.navigateByUrl('/overview');
+    const { accessToken, user } = result;
+    this.localStorage.set<string>('jwt_token', accessToken);
+    this.localStorage.set<string>('jwt_token_refresh', user.refreshToken);
+    this.loggedInUser.next(accessToken);
+    this.setRefreshingToken();
+    this.router.navigateByUrl('/home');
   }
 
   private checkIsUserLoggedIn(): void {
-    const userFromStorage = this.localStorage.get<AuthResponse>('jwt_token');
-    userFromStorage ? this.loggedInUser.next(userFromStorage) : this.loggedInUser.next(null);
+    const userFromStorage = this.localStorage.get<string>('jwt_token');
+    if (userFromStorage) {
+      this.loggedInUser.next(userFromStorage);
+      this.setRefreshingToken();
+    } else {
+      this.loggedInUser.next(null);
+    }
   }
 }

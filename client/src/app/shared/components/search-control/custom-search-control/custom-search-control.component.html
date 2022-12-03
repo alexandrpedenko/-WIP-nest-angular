@@ -1,0 +1,16 @@
+
+<div [formGroup]="form" class="search-form-field__wrapper">
+  <mat-select class="select" formControlName="scope">
+    <mat-option value="userName">People</mat-option>
+    <mat-option value="posts">Posts</mat-option>
+  </mat-select>
+  <mat-divider [vertical]="true" class="divider"></mat-divider>
+  <input
+    matInput
+    type="text"
+    class="input"
+    name="advanced-search"
+    formControlName="query"
+    [placeholder]="placeholder"
+  />
+</div>

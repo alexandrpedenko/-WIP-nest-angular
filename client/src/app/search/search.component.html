@@ -1,0 +1,16 @@
+<div class="container search">
+  <mat-form-field class="search-form-field" appearance="fill" color="accent">
+    <mat-icon matSuffix>search</mat-icon>
+    <app-custom-search-control
+      [formControl]="formControl"
+      placeholder="Looking for..."
+    ></app-custom-search-control>
+  </mat-form-field>
+
+  <div class="search__main">
+    <div class="search__results">
+      <app-user-list [users$]="searchService.users$"></app-user-list>
+    </div>
+  </div>
+</div>
+

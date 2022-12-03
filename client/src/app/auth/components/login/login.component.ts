@@ -35,10 +35,6 @@ export class LoginComponent implements OnInit {
     }).subscribe();
   }
 
-  login() {
-    this.authService.login({email: 'newUser@email.com', password: 'mynewpassword'}).subscribe((data) => {});
-  }
-
   get email() {
     return this.loginForm.get('email');
   }
