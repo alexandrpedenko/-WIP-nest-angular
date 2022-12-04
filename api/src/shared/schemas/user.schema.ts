@@ -23,6 +23,9 @@ export class UserModel {
 
   @Prop()
   refreshToken: string;
+
+  @Prop()
+  profileImage: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserModel);

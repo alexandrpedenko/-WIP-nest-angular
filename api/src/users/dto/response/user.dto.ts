@@ -14,5 +14,5 @@ export class UserResponseDto {
 
   @Expose()
   @IsOptional()
-  refreshToken?: string;
+  profileImage?: string;
 }
