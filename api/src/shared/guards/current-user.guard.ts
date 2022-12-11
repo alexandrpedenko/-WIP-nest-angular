@@ -1,9 +1,10 @@
 import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class CurrentUserGuard extends AuthGuard('jwt') {
-  canActivate(context: ExecutionContext) {
+  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     return super.canActivate(context);
   }
 
@@ -13,7 +14,7 @@ export class CurrentUserGuard extends AuthGuard('jwt') {
       throw err || new UnauthorizedException();
     }
     if (user.id !== requestParam.userId) {
-     throw new UnauthorizedException();
+      throw new UnauthorizedException();
     }
 
     return user;

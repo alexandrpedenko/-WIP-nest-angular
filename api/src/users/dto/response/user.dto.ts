@@ -15,4 +15,12 @@ export class UserResponseDto {
   @Expose()
   @IsOptional()
   profileImage?: string;
+
+  @Expose()
+  @IsOptional()
+  occupation?: string;
+
+  @Expose()
+  @IsOptional()
+  company?: string;
 }

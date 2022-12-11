@@ -14,4 +14,12 @@ export class UpdateUserDto {
   @IsString()
   @IsOptional()
   profileImage?: string;
+
+  @IsOptional()
+  @IsString()
+  occupation?: string;
+
+  @IsOptional()
+  @IsString()
+  company?: string;
 }
