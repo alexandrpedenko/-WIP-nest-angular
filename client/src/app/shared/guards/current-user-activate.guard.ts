@@ -6,15 +6,15 @@ import { Observable } from "rxjs";
 @Injectable({
   providedIn: 'root'
 })
-export class LoginActivate implements CanActivate {
+export class CurrentUserActivate implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<boolean>|Promise<boolean>|boolean {
-    if (!this.authService.accessToken) {
-      this.router.navigate(['auth/login']);
+  ): Observable<boolean> | Promise<boolean> | boolean {
+    if (this.authService.loggedInUser?._id !== route.params['id']) {
+      this.router.navigate(['/home']);
     }
     return true;
   }

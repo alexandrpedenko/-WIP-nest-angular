@@ -14,5 +14,13 @@ export class UserResponseDto {
 
   @Expose()
   @IsOptional()
-  refreshToken?: string;
+  profileImage?: string;
+
+  @Expose()
+  @IsOptional()
+  occupation?: string;
+
+  @Expose()
+  @IsOptional()
+  company?: string;
 }

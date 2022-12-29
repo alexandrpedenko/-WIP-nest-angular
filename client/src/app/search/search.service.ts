@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, map, mergeMap, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, EMPTY } from 'rxjs';
+import { catchError, distinctUntilChanged, map, mergeMap, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { SearchFormFieldValue } from '@shared/components/search-control/custom-search-control/types';
 import { UnsubscribeSubject } from '@shared/utils/rxjs-unsubscribe';

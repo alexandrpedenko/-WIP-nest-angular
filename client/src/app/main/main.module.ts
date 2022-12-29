@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MainRoutingModule } from './main-routing.module';
 import { SharedComponentsModule } from '@shared/components/shared-components.module';
 import { SearchModule } from '@search/search.module';
+import { ProfileModule } from '@profile/profile.module';
 
 @NgModule({
   imports: [
@@ -11,6 +12,7 @@ import { SearchModule } from '@search/search.module';
     MainRoutingModule,
     SharedComponentsModule,
     SearchModule,
+    ProfileModule,
   ],
 })
 export class MainModule {}

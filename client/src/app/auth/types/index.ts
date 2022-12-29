@@ -1,11 +1,13 @@
+export interface UserFromAuth {
+  _id: string;
+  userName: string;
+  email: string;
+  refreshToken: string;
+}
+
 export interface AuthResponse {
-  accessToken: string,
-  user: {
-    _id: string;
-    userName: string;
-    email: string;
-    refreshToken: string;
-  }
+  accessToken: string;
+  user: UserFromAuth;
 }
 
 export interface AuthInput {

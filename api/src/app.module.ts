@@ -5,8 +5,12 @@ import { APP_PIPE } from '@nestjs/core';
 
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { FilesController } from './files/files.controller';
 
 @Module({
+  controllers: [
+    FilesController
+  ],
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.DATABASE_URL),

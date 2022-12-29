@@ -1,11 +1,18 @@
 
-<mat-card class="example-card">
-  <mat-card-header>
-    <div mat-card-avatar class="user-avatar">
-      <!-- <mat-icon>account_circle</mat-icon> -->
-      <span>{{user.userName[0]}}</span>
+<mat-card [routerLink]="['/profile', user._id]">
+  <a [routerLink]="['/profile', user._id]" class="userListItem__link">
+    <div class="userListItem">
+      <div mat-card-avatar class="userListItem__no-user-avatar" *ngIf="!user.profileImage">
+        <span>{{user.userName[0]}}</span>
+      </div>
+      <div *ngIf="user.profileImage" class="userListItem__avatar">
+        <img src="{{apiLink}}files/profile-image/{{user.profileImage}}" alt="">
+      </div>
+      <div class="userListItem__info">
+        <mat-card-title>{{ user.userName }}</mat-card-title>
+        <span *ngIf="user.company">{{user.company}}</span>
+        <span *ngIf="user.occupation"> / {{user.occupation}}</span>
+      </div>
     </div>
-    <mat-card-title>{{ user.userName }}</mat-card-title>
-    <mat-card-subtitle>Some user status</mat-card-subtitle>
-  </mat-card-header>
+  </a>
 </mat-card>

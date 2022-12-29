@@ -9,9 +9,17 @@ import {
   HttpStatus,
   UseGuards,
   Query,
+  Post,
+  UseInterceptors,
+  UploadedFile,
+  Request,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { v4 as uuidv4 } from 'uuid';
+import * as path from 'path';
 
-import { UserDocument, UserModel } from '@schemas/user.schema';
+import { UserDocument } from '@schemas/user.schema';
 import { RESPONSE_MESSAGES } from '@constants/user';
 import { UsersService } from '@users/service/users.service';
 import { Serialize } from '@decorators/serialize.decorator';
@@ -53,6 +61,28 @@ export class UsersController {
     const isUserExist = await this.usersService.isUserExists(userId);
     if (isUserExist) {
       return this.usersService.updateUser(userId, updateUserDto);
+    }
+    throw new HttpException(RESPONSE_MESSAGES.userNotFound, HttpStatus.NOT_FOUND);
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor(
+    'file',
+    {
+      storage: diskStorage({
+        destination: './uploads/profileUploads',
+        filename: (req, file, cb) => {
+          const filename: string = path.parse(file.originalname).name.replace(/\s/g, '') + uuidv4();
+          const extension: string = path.parse(file.originalname).ext;
+          cb(null, `${filename}${extension}`);
+        }
+      })
+    }
+  ))
+  async uploadFile(@UploadedFile() file: Express.Multer.File, @Request() req): Promise<UserDocument> {
+    const isUserExist = await this.usersService.isUserExists(req.user.id);
+    if (isUserExist) {
+      return this.usersService.updateUser(req.user.id, { profileImage: file.filename });
     }
     throw new HttpException(RESPONSE_MESSAGES.userNotFound, HttpStatus.NOT_FOUND);
   }

@@ -48,7 +48,7 @@
       </mat-hint>
     </mat-form-field>
 
-    <button mat-flat-button color="primary" [disabled]="!registerForm.valid" type="submit" class="form-submit">
+    <button mat-flat-button color="primary" [disabled]="!registerForm.valid && registerForm.touched" type="submit" class="form-submit">
       Register
     </button>
   </div>

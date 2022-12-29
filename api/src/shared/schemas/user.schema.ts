@@ -23,6 +23,15 @@ export class UserModel {
 
   @Prop()
   refreshToken: string;
+
+  @Prop()
+  profileImage: string;
+
+  @Prop()
+  occupation: string;
+
+  @Prop()
+  company: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserModel);

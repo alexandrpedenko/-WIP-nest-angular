@@ -2,16 +2,24 @@ import { Exclude } from 'class-transformer';
 import { IsEmail, IsString, IsOptional } from 'class-validator';
 
 export class UpdateUserDto {
-  @Exclude()
-  @IsOptional()
-  _id: string;
-
   @IsEmail()
   @Exclude()
   @IsOptional()
-  email: string;
+  email?: string;
 
   @IsString()
   @IsOptional()
-  userName: string;
+  userName?: string;
+
+  @IsString()
+  @IsOptional()
+  profileImage?: string;
+
+  @IsOptional()
+  @IsString()
+  occupation?: string;
+
+  @IsOptional()
+  @IsString()
+  company?: string;
 }

@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SearchComponent } from '@search/search.component';
 import { HomeComponent } from '@home/home.component';
+import { ProfileComponent } from '@profile/profile.component';
+import { ProfileUpdateComponent } from '@profile/profile-update/profile-update.component';
+import { CurrentUserActivate } from '@shared/guards/current-user-activate.guard';
 
 const routes: Routes = [
   {
@@ -18,6 +21,15 @@ const routes: Routes = [
       {
         path: 'home',
         component: HomeComponent,
+      },
+      {
+        path: 'profile/:id',
+        component: ProfileComponent,
+      },
+      {
+        path: 'profile/:id/update',
+        component: ProfileUpdateComponent,
+        canActivate: [CurrentUserActivate]
       }
     ]
   }
