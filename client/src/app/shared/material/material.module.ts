@@ -11,6 +11,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const modules = [
   CommonModule,
@@ -25,6 +26,7 @@ const modules = [
   MatCardModule,
   MatDividerModule,
   MatSelectModule,
+  MatDialogModule,
 ]
 
 @NgModule({

@@ -1,0 +1,28 @@
+<div class="container">
+  <div
+    *ngIf="(user$ | async) as user; else loading"
+    class="profile"
+  >
+    <div class="profile__top">
+      <div class="profile__avatar">
+        <div mat-card-avatar class="user-avatar" *ngIf="!user.profileImage">
+          <span>{{user.userName[0]}}</span>
+        </div>
+        <img *ngIf="user.profileImage" src="{{apiLink}}files/profile-image/{{user.profileImage}}" alt="User Avatar">
+      </div>
+      <div class="profile__info">
+        <h1 class="profile__userName">{{user.userName}}</h1>
+        <p class="profile__company">{{user.company}}</p>
+        <p class="profile__occupation">{{user.occupation}}</p>
+      </div>
+    </div>
+    <div *ngIf="currentUser">
+      <a mat-button [routerLink]="'update'" >Update Profile</a>
+    </div>
+  </div>
+
+  <ng-template #loading>
+    <div>Loading ...</div>
+  </ng-template>
+</div>
+

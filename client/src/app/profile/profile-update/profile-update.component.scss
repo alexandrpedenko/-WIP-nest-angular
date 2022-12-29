@@ -1,0 +1,9 @@
+.form-container {
+  &__buttons {
+    padding-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

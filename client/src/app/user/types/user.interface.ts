@@ -1,5 +1,9 @@
 export interface IUser {
   _id: string;
-  userName: string;
   email: string;
+  userName: string;
+  refreshToken: string;
+  profileImage: string;
+  occupation: string;
+  company: string;
 }
