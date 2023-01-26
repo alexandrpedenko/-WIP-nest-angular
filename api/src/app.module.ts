@@ -6,6 +6,7 @@ import { APP_PIPE } from '@nestjs/core';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { FilesController } from './files/files.controller';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   controllers: [
@@ -16,6 +17,7 @@ import { FilesController } from './files/files.controller';
     MongooseModule.forRoot(process.env.DATABASE_URL),
     UsersModule,
     AuthModule,
+    PostsModule,
   ],
   providers: [
     {

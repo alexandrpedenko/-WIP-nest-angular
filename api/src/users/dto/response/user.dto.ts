@@ -23,4 +23,8 @@ export class UserResponseDto {
   @Expose()
   @IsOptional()
   company?: string;
+
+  @Expose()
+  @Transform(params => { return params.obj.posts.map(item => item) })
+  posts: string[]
 }

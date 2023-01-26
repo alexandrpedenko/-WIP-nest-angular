@@ -36,7 +36,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Get()
-  async getAllUsers(@Query() query: GetEntityDto): Promise<UserDocument[]> {
+  async getAllUsers(@Query() query: GetEntityDto<UserDocument>): Promise<UserDocument[]> {
     return this.usersService.getAllUsers(query);
   }
 

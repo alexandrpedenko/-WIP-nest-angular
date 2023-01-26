@@ -28,7 +28,10 @@ export class AuthService {
         id: _id,
         email: email
       });
-      await this.authRepository.findOneAndUpdate({ _id }, { refreshToken });
+      await this.authRepository.findOneAndUpdate({
+        entityFilterQuery: { _id },
+        entityData: { refreshToken },
+      });
       return {
         user: { _id, email, userName, refreshToken },
         accessToken,
@@ -50,7 +53,10 @@ export class AuthService {
       email: user.email,
     });
 
-    await this.authRepository.findOneAndUpdate({ _id }, { refreshToken });
+    await this.authRepository.findOneAndUpdate({
+      entityFilterQuery: { _id },
+      entityData: { refreshToken },
+    });
     return {
       user: { _id, email, userName, refreshToken },
       accessToken,
@@ -58,13 +64,13 @@ export class AuthService {
   }
 
   public async logout(id: string) {
-    await this.authRepository.findOneAndUpdate(
-      { 
+    await this.authRepository.findOneAndUpdate({
+      entityFilterQuery: { 
         _id: id,
         refreshToken: { $ne: null }
       },
-      { refreshToken: null }
-    );
+      entityData: { refreshToken: null },
+    });
   }
 
   public async regenerateRefreshToken(_id: string, oldRefreshToken: string): Promise<{
@@ -81,7 +87,10 @@ export class AuthService {
     }
 
     const [ accessToken, newRefreshToken ] = await this.generateJwt({ email, id: _id });
-    await this.authRepository.findOneAndUpdate({ _id }, { refreshToken: newRefreshToken });
+    await this.authRepository.findOneAndUpdate({
+        entityFilterQuery: { _id },
+        entityData: { refreshToken: newRefreshToken },
+    });
     return { accessToken, refreshToken: newRefreshToken };
   }
 
