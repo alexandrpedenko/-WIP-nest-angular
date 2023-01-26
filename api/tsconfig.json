@@ -28,6 +28,7 @@
       "@users/*": ["src/users/*"],
       "@auth/*": ["src/auth/*"],
       "@database/*": ["src/database/*"],
+      "@posts/*": ["src/posts/*"],
     },
   }
 }

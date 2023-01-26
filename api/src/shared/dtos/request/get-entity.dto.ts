@@ -1,7 +1,11 @@
 import { IsNumber, Min, IsOptional, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
+import { FilterQuery } from 'mongoose';
  
-export class GetEntityDto {
+export class GetEntityDto<T> {
+  @IsOptional()
+  findQuery?: FilterQuery<T>;
+
   @Type(() => String)
   @IsOptional()
   @IsString()

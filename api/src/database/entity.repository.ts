@@ -1,5 +1,6 @@
 import { FilterQuery, Model, Document } from "mongoose";
 import { GetEntityDto } from "@dtos/request";
+import { IUpdateArguments } from "./types";
 
 export abstract class EntityRepository<T extends Document> {
   constructor(protected readonly entityModel: Model<T>) {}
@@ -11,8 +12,8 @@ export abstract class EntityRepository<T extends Document> {
     return this.entityModel.findOne(entityQuery, projection).exec();
   }
 
-  async find({searchField, searchValue, skip = 0, limit}: GetEntityDto): Promise<T[] | null> {
-    const filterQuery = {};
+  async find({findQuery, searchField, searchValue, skip = 0, limit}: GetEntityDto<T>): Promise<T[] | null> {
+    const filterQuery = findQuery ? { ...findQuery } : {};
     if (searchField && searchValue) {
       filterQuery[searchField] = { $regex: searchValue, $options: "i" };
     }
@@ -25,11 +26,14 @@ export abstract class EntityRepository<T extends Document> {
     return query;
   }
 
-  async findOneAndUpdate(
-    entityFilterQuery: FilterQuery<T>,
-    entityData: Partial<T>,
-  ): Promise<T> {
-    return await this.entityModel.findOneAndUpdate(entityFilterQuery, entityData, {
+  async findOneAndUpdate({
+    entityFilterQuery,
+    entityData,
+    updateOperators = null,
+  }: IUpdateArguments<T>): Promise<T> {
+    const updateObject = updateOperators ? updateOperators : entityData;
+
+    return await this.entityModel.findOneAndUpdate(entityFilterQuery, updateObject, {
       new: true,
     }).exec();
   }

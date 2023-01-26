@@ -13,7 +13,7 @@ export class UsersService {
     return await this.usersRepository.findOne({ _id });
   }
 
-  async getAllUsers(query: GetEntityDto): Promise<UserDocument[]> {
+  async getAllUsers(query: GetEntityDto<UserDocument>): Promise<UserDocument[]> {
     return await this.usersRepository.find(query);
   }
 
@@ -21,7 +21,10 @@ export class UsersService {
     _id: string,
     userUpdates: UpdateUserDto,
   ): Promise<UserDocument> {
-    return await this.usersRepository.findOneAndUpdate({ _id }, userUpdates);
+    return await this.usersRepository.findOneAndUpdate({
+      entityFilterQuery: { _id },
+      entityData: userUpdates,
+    });
   }
 
   async deleteById(_id: string): Promise<UserDocument> {
