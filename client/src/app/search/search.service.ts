@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, EMPTY } from 'rxjs';
-import { catchError, distinctUntilChanged, map, mergeMap, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { distinctUntilChanged, map, switchMap, takeUntil } from 'rxjs/operators';
 
 import { SearchFormFieldValue } from '@shared/components/search-control/custom-search-control/types';
 import { UnsubscribeSubject } from '@shared/utils/rxjs-unsubscribe';
-import { UserApiService } from '@user/services/user-api.service';
 import { IUser } from '@user/types/user.interface';
 import { SearchState } from './types';
+import { UserService } from '@user/services/user.service';
 
 
 @Injectable({ providedIn: 'root' })
@@ -31,16 +31,14 @@ export class SearchService {
   public pagination$ = this.state$.pipe(map(state => state.pagination), distinctUntilChanged());
   public users$ = this.state$.pipe(map(state => state.users), distinctUntilChanged());
 
-  constructor(
-    private userApiService: UserApiService,
-  ) {}
+  constructor(private userService: UserService) {}
 
   initSearch() {
     this.unsubscribeSubject = new UnsubscribeSubject();
 
     combineLatest([this.searchQuery$, this.pagination$]).pipe(
       switchMap(([ searchQuery, pagination ]) => {
-        return this.userApiService.findUsers({
+        return this.userService.findUsers({
           searchField: searchQuery.scope,
           searchValue: searchQuery.query,
           skip: pagination.skip,
