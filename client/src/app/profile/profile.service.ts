@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { UserApiService } from '@user/services/user-api.service';
+import { UserService } from '@user/services/user.service';
 import { IUser } from '@user/types/user.interface';
 
 @Injectable({
@@ -8,15 +8,13 @@ import { IUser } from '@user/types/user.interface';
 })
 export class ProfileService {
 
-  constructor(
-    private userApiService: UserApiService,
-  ) {}
+  constructor(private userService: UserService) {}
 
   getUser(userId: string): Observable<IUser> {
-    return this.userApiService.getUser(userId);
+    return this.userService.getUser(userId);
   }
 
   updateProfile(userId: string, updateUserData: Partial<IUser>): Observable<IUser> {
-    return this.userApiService.updateUser(userId, updateUserData);
+    return this.userService.updateUser(userId, updateUserData);
   }
 }
