@@ -2,15 +2,40 @@
   <mat-form-field class="search-form-field" appearance="fill" color="accent">
     <mat-icon matSuffix>search</mat-icon>
     <app-custom-search-control
-      [formControl]="formControl"
       placeholder="Looking for..."
+      [formControl]="formControl"
+      [options]="searchOptions"
+      [onReset]="resetSearch"
+      (onInputFocus)="onSearchInputFocus()"
     ></app-custom-search-control>
   </mat-form-field>
 
   <div class="search__main">
-    <div class="search__results">
-      <app-user-list [users$]="searchService.users$"></app-user-list>
+    <div
+      class="search__results"
+      *ngIf="searchService.isSearching$ | async; else defaultPostSearching"
+    >
+      <ng-container *ngIf="(searchService.searchQuery$ | async) as searchQuery">
+        <div class="search__results-header">
+          <button mat-icon-button color="accent"
+            matTooltip="Cancel search"
+            (click)="onSearchCancel()"
+          >
+            <mat-icon>cancel</mat-icon>
+          </button>
+          <h2 class="search__results-title">
+            Looking for: <span>{{ searchQuery.query }}</span>
+          </h2>
+        </div>
+        <div class="search__results-items">
+          <app-user-list *ngIf="searchQuery.scope === searchScope.UserName" [users$]="searchService.users$"></app-user-list>
+          <app-posts-list *ngIf="searchQuery.scope === searchScope.Posts" [posts$]="searchService.posts$"></app-posts-list>
+        </div>
+      </ng-container>
     </div>
   </div>
-</div>
 
+  <ng-template #defaultPostSearching>
+    <app-posts-list [posts$]="searchService.defaultSearchedPosts$"></app-posts-list>
+  </ng-template>
+</div>

@@ -1,0 +1,8 @@
+<mat-card [routerLink]="['/post', post._id]" class="postItem">
+  <a [routerLink]="['/post', post._id]" class="postItem__link">
+    <div class="postItem__info">
+      <mat-card-title>{{ post.title }}</mat-card-title>
+      <p *ngIf="post.description">{{ post.description }}</p>
+    </div>
+  </a>
+</mat-card>

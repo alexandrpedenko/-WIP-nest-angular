@@ -1,11 +1,30 @@
-import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild } from '@angular/core';
-import { ControlValueAccessor, NgControl, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnDestroy,
+  OnInit,
+  Optional,
+  Output,
+  Self,
+  ViewChild,
+} from '@angular/core';
+import {
+  ControlValueAccessor,
+  NgControl,
+  FormBuilder,
+  FormGroup,
+  FormControl,
+} from '@angular/forms';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { MatInput } from '@angular/material/input';
-import { Subject,  } from 'rxjs';
-import { take, takeUntil, tap } from 'rxjs/operators';
-import { SearchFormFieldValue } from './types';
+import { Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { SearchControlOptions, SearchFormFieldValue } from './types';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { UnsubscribeSubject } from '@shared/utils/rxjs-unsubscribe';
 
@@ -19,19 +38,24 @@ export class CustomErrorMatcher implements ErrorStateMatcher {
   selector: 'app-custom-search-control',
   templateUrl: './custom-search-control.component.html',
   styleUrls: ['./custom-search-control.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: MatFormFieldControl,
-      useExisting: CustomSearchControlComponent
+      useExisting: CustomSearchControlComponent,
     },
     {
       provide: ErrorStateMatcher,
       useClass: CustomErrorMatcher,
     },
-  ]
+  ],
 })
 export class CustomSearchControlComponent
-  implements OnInit, OnDestroy, MatFormFieldControl<SearchFormFieldValue>, ControlValueAccessor
+  implements
+    OnInit,
+    OnDestroy,
+    MatFormFieldControl<SearchFormFieldValue>,
+    ControlValueAccessor
 {
   static nextId = 0;
   stateChanges = new Subject<void>();
@@ -49,6 +73,12 @@ export class CustomSearchControlComponent
   }
   @HostBinding('attr.aria-describedby')
   describedBy = '';
+
+  @Input()
+  options: SearchControlOptions;
+
+  @Input()
+  onReset: Subject<void>;
 
   @Input()
   set value(value: SearchFormFieldValue) {
@@ -74,16 +104,16 @@ export class CustomSearchControlComponent
   }
 
   get errorState(): boolean {
-    return this.errorStateMatcher.isErrorState(
-      this.ngControl.control,
-      null
-    );
+    return this.errorStateMatcher.isErrorState(this.ngControl.control, null);
   }
 
   @Input()
   required: boolean;
   @Input()
   disabled: boolean;
+
+  @Output()
+  onInputFocus = new EventEmitter();
 
   focused: boolean;
   controlType = 'custom-form-field';
@@ -105,7 +135,7 @@ export class CustomSearchControlComponent
   }
 
   ngOnInit(): void {
-    this.focusMonitor.monitor(this.input).subscribe(focused => {
+    this.focusMonitor.monitor(this.input).subscribe((focused) => {
       this.focused = !!focused;
       this.stateChanges.next();
     });
@@ -118,6 +148,11 @@ export class CustomSearchControlComponent
     this.form.valueChanges
       .pipe(takeUntil(this.unsubscribeSubject))
       .subscribe((value) => this.onChange(value));
+    this.onReset
+      .pipe(takeUntil(this.unsubscribeSubject))
+      .subscribe(() => {
+        this.form.get('query')?.reset();
+      });
   }
 
   ngOnDestroy() {

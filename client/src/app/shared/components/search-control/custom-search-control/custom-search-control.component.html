@@ -1,8 +1,7 @@
 
 <div [formGroup]="form" class="search-form-field__wrapper">
   <mat-select class="select" formControlName="scope">
-    <mat-option value="userName">People</mat-option>
-    <mat-option value="posts">Posts</mat-option>
+    <mat-option *ngFor="let option of options" [value]="option.value">{{option.label}}</mat-option>
   </mat-select>
   <mat-divider [vertical]="true" class="divider"></mat-divider>
   <input
@@ -12,5 +11,6 @@
     name="advanced-search"
     formControlName="query"
     [placeholder]="placeholder"
+    (focus)="onInputFocus.emit()"
   />
 </div>
