@@ -7,6 +7,7 @@ import { AuthRepository } from '@auth/repository/auth.repository';
 import { AuthResponseDto } from '@auth/dto/response';
 import { LogInUserDto, CreateUserDto } from '@auth/dto/request';
 import { RESPONSE_MESSAGES } from '@constants/user';
+import { UserResponseDto } from '@users/dto/response';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +22,7 @@ export class AuthService {
     if (user === null) {
       throw new HttpException(RESPONSE_MESSAGES.invalidUserCredentials, HttpStatus.BAD_REQUEST);
     }
-    const { _id, email, userName, password } = user;
+    const { _id, email, username, password } = user;
 
     if (await this.comparePasswords(userPayload.password, password)) {
       const [accessToken, refreshToken] = await this.generateJwt({
@@ -33,7 +34,7 @@ export class AuthService {
         entityData: { refreshToken },
       });
       return {
-        user: { _id, email, userName, refreshToken },
+        user: { _id, email, username, refreshToken },
         accessToken,
       };
     }
@@ -41,29 +42,34 @@ export class AuthService {
     throw new HttpException(RESPONSE_MESSAGES.invalidUserCredentials, HttpStatus.BAD_REQUEST);
   }
 
-  public async registerUser(user: CreateUserDto): Promise<AuthResponseDto> {
+  public async registerUser(user: CreateUserDto): Promise<{message: string}> {
     const hashedPassword = await this.hashPassword(user.password);
-    const { _id, email, userName } = await this.authRepository.create({
+    const createdUser = await this.authRepository.create({
       email: user.email,
-      userName: user.userName,
+      username: user.username,
       password: hashedPassword,
     });
-    const [accessToken, refreshToken] = await this.generateJwt({ 
-      id: _id,
-      email: user.email,
-    });
 
-    await this.authRepository.findOneAndUpdate({
-      entityFilterQuery: { _id },
-      entityData: { refreshToken },
-    });
-    return {
-      user: { _id, email, userName, refreshToken },
-      accessToken,
-    };
+    if (!createdUser) {
+      throw new HttpException(RESPONSE_MESSAGES.registrationFailed, HttpStatus.BAD_REQUEST);
+    }
+
+    return { message: RESPONSE_MESSAGES.userRegistrationSuccess}
   }
 
-  public async logout(id: string) {
+  public async getUser(id: string): Promise<UserResponseDto> {
+    const user = await this.authRepository.findOne({
+      _id: id,
+    });
+
+    if (!user) {
+      throw new HttpException(RESPONSE_MESSAGES.userNotFound, HttpStatus.BAD_REQUEST);
+    }
+
+    return user;
+  }
+
+  public async logout(id: string): Promise<boolean> {
     await this.authRepository.findOneAndUpdate({
       entityFilterQuery: { 
         _id: id,
@@ -71,6 +77,8 @@ export class AuthService {
       },
       entityData: { refreshToken: null },
     });
+
+    return true
   }
 
   public async regenerateRefreshToken(_id: string, oldRefreshToken: string): Promise<{
@@ -104,12 +112,12 @@ export class AuthService {
 
   private async generateJwt({ id, email }: { id: string, email: string }): Promise<string[]> {
     const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync({ 
+      this.jwtService.signAsync({
         user: {
           id,
           email,
         }
-      }, { secret: this.configService.get('JWT_SECRET'), expiresIn: 60 * 15 }),
+      }, { secret: this.configService.get('JWT_SECRET'), expiresIn: "15m"}),
 
       this.jwtService.signAsync({ 
         user: {

@@ -38,9 +38,9 @@ export abstract class EntityRepository<T extends Document> {
     }).exec();
   }
 
-  async create(entityData: Partial<T>): Promise<T> {
+  async create<D>(entityData: D): Promise<T> {
     const entity = new this.entityModel(entityData);
-    return entity.save();
+    return await entity.save();
   }
 
   async delete(userFilterQuery: FilterQuery<T>): Promise<T> {

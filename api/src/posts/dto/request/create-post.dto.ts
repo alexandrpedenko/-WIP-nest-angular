@@ -5,7 +5,7 @@ import { Types } from 'mongoose';
 export class CreatePostDto {
   @Expose()
   @IsString()
-  author: Types.ObjectId;
+  author: string;
 
   @Expose()
   @IsString()

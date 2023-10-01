@@ -61,7 +61,7 @@ describe('Users Controller', () => {
       updateUserDto = {
         _id: 'someUserId',
         email: 'some@email.com',
-        userName: 'Updated Name',
+        username: 'Updated Name',
       }
       user = await controller.updateUser(userStub()._id, updateUserDto);
     })

@@ -8,7 +8,7 @@ export class CreateUserDto {
 
   @Expose()
   @IsString()
-  userName: string;
+  username: string;
 
   @IsString()
   password: string;

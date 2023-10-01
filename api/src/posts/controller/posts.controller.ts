@@ -15,6 +15,7 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) { }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   async createPost(@Body() createPostDto: CreatePostDto): Promise<PostDocument> {
     return await this.postsService.createPost(createPostDto);
   }
@@ -42,13 +43,13 @@ export class PostsController {
 
   @Delete(':postId')
   @UseGuards(JwtAuthGuard, UserIsAuthorGuard)
-  async deleteUser(@Param('postId') postId: string): Promise<PostDocument> {
+  async deletePostByUser(@Param('postId') postId: string): Promise<{message: string}> {
     return this.postsService.deleteById(postId);
   }
 
   @Patch(':postId')
   @UseGuards(JwtAuthGuard, UserIsAuthorGuard)
-  async updateUser(
+  async updatePost(
     @Param('postId') postId: string,
     @Body() updateUserDto: UpdatePostDto,
   ): Promise<PostDocument> {

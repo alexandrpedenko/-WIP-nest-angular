@@ -4,8 +4,13 @@ import { IsOptional, IsString } from 'class-validator';
 export class PostResponseDto {
   @Expose()
   @IsString()
+  @Transform(params => params.obj._id)
+  _id: string;
+
+  @Expose()
+  @IsString()
   @Transform(({ obj }) => {
-    return obj.author.toString();
+    return obj.author
   })
   author: string;
 

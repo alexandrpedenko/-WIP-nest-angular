@@ -19,7 +19,7 @@ export class UserModel {
   password: string;
 
   @Prop({ required: true })
-  userName: string;
+  username: string;
 
   @Prop()
   refreshToken: string;
@@ -32,9 +32,6 @@ export class UserModel {
 
   @Prop()
   company: string;
-
-  @Prop({ type: [SchemaTypes.ObjectId], ref: 'PostModel' })
-  posts: Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserModel);

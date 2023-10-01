@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 export type PostDocument = PostModel & Document;
 
@@ -7,8 +7,8 @@ export type PostDocument = PostModel & Document;
   collection: 'posts',
 })
 export class PostModel {
-  @Prop({ required: true, type: Types.ObjectId, ref: 'UserModel' })
-  author: Types.ObjectId;
+  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'UserModel' })
+  author: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: true })
   title: string;

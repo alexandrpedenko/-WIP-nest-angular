@@ -6,12 +6,13 @@
         <span>{{user.userName[0]}}</span>
       </div>
       <div *ngIf="user.profileImage" class="userListItem__avatar">
-        <img src="{{apiLink}}files/profile-image/{{user.profileImage}}" alt="">
+        <img src="{{apiLink}}files/profile-image/{{user.profileImage}}" [alt]="user.userName" data-testId="user--userImage">
       </div>
       <div class="userListItem__info">
-        <mat-card-title>{{ user.userName }}</mat-card-title>
-        <span *ngIf="user.company">{{user.company}}</span>
-        <span *ngIf="user.occupation"> / {{user.occupation}}</span>
+        <mat-card-title data-testId="user--userName">{{ user.userName }}</mat-card-title>
+        <span *ngIf="user.company" data-testId="user--userCompany">{{user.company}}</span>
+        <span> / </span>
+        <span *ngIf="user.occupation" data-testId="user--userOccupation">{{user.occupation}}</span>
       </div>
     </div>
   </a>

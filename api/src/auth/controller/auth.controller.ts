@@ -15,14 +15,14 @@ import { AuthResponseDto } from '@auth/dto/response';
 import { Serialize } from '@decorators/serialize.decorator';
 import { JwtAuthGuard, JwtRefreshAuthGuard } from '@auth/guards';
 import { GetCurrentUserId } from '@decorators/current-user.decorator';
+import { UserResponseDto } from '@users/dto/response';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Serialize(AuthResponseDto)
-  @Post('/register')
-  async registerUser(@Body() createUserDto: CreateUserDto): Promise<AuthResponseDto> {
+  @Post('/signup')
+  async registerUser(@Body() createUserDto: CreateUserDto): Promise<{message: string}> {
     const isUserExists = await this.authService.isUserExists(createUserDto.email)
     if (isUserExists) {
       throw new HttpException(RESPONSE_MESSAGES.userRegistered, HttpStatus.BAD_REQUEST);
@@ -37,10 +37,17 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/logout')
+  @Post('/logout')
   @HttpCode(HttpStatus.OK)
-  async logoutUser(@GetCurrentUserId('id') id: string): Promise<void> {
-    await this.authService.logout(id);
+  async logoutUser(@GetCurrentUserId('id') id: string): Promise<boolean> {
+    return await this.authService.logout(id);
+  }
+
+  @UseGuards(JwtRefreshAuthGuard)
+  @Get('/user-profile')
+  @HttpCode(HttpStatus.OK)
+  async getUser(@GetCurrentUserId('id') id: string): Promise<UserResponseDto> {
+    return await this.authService.getUser(id);
   }
 
   @UseGuards(JwtRefreshAuthGuard)
@@ -49,7 +56,7 @@ export class AuthController {
   async refreshToken(
     @GetCurrentUserId('refreshToken') refreshToken: string, 
     @GetCurrentUserId('id') id: string
-  )  {
+  ) {
     return await this.authService.regenerateRefreshToken(id, refreshToken);
   }
 }

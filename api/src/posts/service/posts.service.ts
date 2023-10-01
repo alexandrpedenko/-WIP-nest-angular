@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatePostDto, UpdatePostDto } from '@posts/dto/request';
 import { PostsRepository } from '@posts/repository/posts.repository';
 import { UsersRepository } from '@users/repository/users.repository';
@@ -15,7 +15,7 @@ export class PostsService {
 
   public async createPost(createPostDto: CreatePostDto): Promise<PostDocument> {
     const cratedPost = await this.postRepository.create({
-      author: new Types.ObjectId(createPostDto.author),
+      author: createPostDto.author,
       title: createPostDto.title,
       description: createPostDto.description,
       createdDate: new Date(Date.now()),
@@ -47,8 +47,13 @@ export class PostsService {
     return await this.postRepository.findOne({ _id: postId });
   }
 
-  public async deleteById(postId: string) {
-    return await this.postRepository.delete({ _id: postId });
+  public async deleteById(postId: string): Promise<{message: string}> {
+    const deletedPost = await this.postRepository.delete({ _id: postId });
+    if (deletedPost) {
+      return { message: 'Post deleted successfully'}
+    }
+
+    throw new HttpException('Error during post deleting process', HttpStatus.NOT_FOUND);
   }
 
   async updatePost(
